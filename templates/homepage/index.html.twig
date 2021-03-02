@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomepageController!{% endblock %}
+
+{% block body %}
+    {% if errors is defined %}{{ dump(errors) }}{% endif %}
+    {% if response is defined %}
+        {{ dump(response) }}
+        <div id="ipg" style="width: 500px; height: 500px; border: 1px solid gray;">
+
+        </div>
+        <script type="text/javascript">
+            !function (d) {
+                let js, tag = d.getElementsByTagName('script')[0];
+                if (!d.getElementById('include-js')) {
+                    js = d.createElement('script');
+                    js.setAttribute('type', 'text/javascript');
+                    js.setAttribute('src', 'http://dev.local/devs/3rd-party-cookies/public/iframe.js?token={{ response.token }}');
+                    tag.parentNode.insertBefore(js, tag);
+                }
+            }(document)
+        </script>
+    {% endif %}
+{% endblock %}
