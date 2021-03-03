@@ -12,12 +12,32 @@
 </div>
 
     <script type="text/javascript">
-        const iframe = document.createElement('iframe');
-        iframe.id = '3rd-party-check';
-        iframe.src = '{{ path('cookie_set') }}';
-        iframe.style.display = 'none';
-        iframe.style.position = 'fixed';
+        var frame = document.createElement('iframe');
+        frame.id = '3pc';
+        frame.src = '{{ asset('check/index.html') }}';
+        frame.style.display = 'none';
+        frame.style.position = 'fixed';
 
-        document.body.appendChild(iframe);
+        window.addEventListener(
+            'message',
+            function listen(event) {
+                if (event.data === '3pc.supported' || event.data === '3pc.unsupported') {
+                    supported = event.data === '3pc.supported';
+                    document.body.removeChild(frame);
+                    window.removeEventListener('message', listen);
+                }
+            },
+            false
+        );
+
+        setTimeout(function() {
+            if (supported === null) {
+                supported = false;
+                document.body.removeChild(frame);
+            }
+            console.info(supported);
+        }, 1e3);
+
+        document.body.appendChild(frame);
     </script>
 {% endblock %}
